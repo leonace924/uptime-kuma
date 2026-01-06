@@ -593,7 +593,7 @@ router.get("/api/badge/:id/response", cache("5 minutes"), async (request, respon
  * @param {boolean} isExplicitDown - If status=down was explicitly pushed, bypass retries.
  * @returns {void}
  */
-function determineStatus(status, previousHeartbeat, maxretries, isUpsideDown, bean, isExplicitDown = false) {
+function determineStatus(status, previousHeartbeat, maxretries, isUpsideDown, bean, isExplicitDown) {
     if (isUpsideDown) {
         status = flipStatus(status);
     }
