@@ -56,9 +56,7 @@ router.all("/api/push/:pushToken", async (request, response) => {
         // When explicitly pushing down, bypass retry logic and go directly to DOWN
         const isExplicitDown = request.query.status === "down";
 
-        let monitor = await R.findOne("monitor", " push_token = ? AND active = 1 ", [
-            pushToken
-        ]);
+        let monitor = await R.findOne("monitor", " push_token = ? AND active = 1 ", [pushToken]);
 
         if (!monitor) {
             throw new Error("Monitor not found or not active.");
@@ -84,7 +82,14 @@ router.all("/api/push/:pushToken", async (request, response) => {
             msg = "Monitor under maintenance";
             bean.status = MAINTENANCE;
         } else {
-            determineStatus(statusFromParam, previousHeartbeat, monitor.maxretries, monitor.isUpsideDown(), bean, isExplicitDown);
+            determineStatus(
+                statusFromParam,
+                previousHeartbeat,
+                monitor.maxretries,
+                monitor.isUpsideDown(),
+                bean,
+                isExplicitDown
+            );
         }
 
         // Calculate uptime
